@@ -29,6 +29,14 @@ def fetch_bitcoin_data_one_year():
         print("Error fetching data:", response.status_code, response.text)
         return None
 
+def prepare_features(data):
+
+    # Fatures (X) and target (y)    
+    data["day"] = (data["timestamp"] - data["timestamp"].min()).dt.days
+    X = data[["day"]]
+    y = data["price"]
+    return X, y
+
 def main():
 
     # Fetch data for the past year
