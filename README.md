@@ -1,1 +1,1 @@
-# blockchain-price-prediction
+# bitcoin-price-prediction
