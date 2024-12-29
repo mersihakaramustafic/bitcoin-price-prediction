@@ -1,19 +1,19 @@
 import requests
 import pandas as pd
 import datetime
-import matplotlib.pyplot as plt
 
-def fetch_bitcoin_data(start_date, end_date):
-    # Convert dates to Unix timestamps
-    start_ts = int(datetime.datetime.strptime(start_date, "%Y-%m-%d").timestamp())
-    end_ts = int(datetime.datetime.strptime(end_date, "%Y-%m-%d").timestamp())
+def fetch_bitcoin_data_one_year():
+    
+    # Calculate the UNIX timestamps for the past year
+    end_ts = int(datetime.datetime.now().timestamp())
+    start_ts = int((datetime.datetime.now() - datetime.timedelta(days=365)).timestamp())
 
-    # Fetch data from CoinGecko API
-    url = f"https://api.coingecko.com/api/v3/coins/bitcoin/market_chart/range"
+    # CoinGecko API URL for Bitcoin market data
+    url = "https://api.coingecko.com/api/v3/coins/bitcoin/market_chart/range"
     params = {
-        "vs_currency": "usd",
-        "from": start_ts,
-        "to": end_ts,
+        "vs_currency": "usd",  # Convert to USD
+        "from": start_ts,  # Start timestamp
+        "to": end_ts,  # End timestamp
     }
 
     response = requests.get(url, params=params)
@@ -28,22 +28,22 @@ def fetch_bitcoin_data(start_date, end_date):
         print("Error fetching data:", response.status_code, response.text)
         return None
 
-# Fetch data for a specific range
-start_date = "2024-01-01"
-end_date = "2024-12-01"
-bitcoin_data = fetch_bitcoin_data(start_date, end_date)
+# Fetch data for the past year
+bitcoin_data = fetch_bitcoin_data_one_year()
 
 # Save to CSV and visualize
 if bitcoin_data is not None:
-    bitcoin_data.to_csv("bitcoin_prices.csv", index=False)
+    bitcoin_data.to_csv("bitcoin_last_year_prices.csv", index=False)
     print(bitcoin_data.head())
 
     # Plot the data
+    import matplotlib.pyplot as plt
+
     plt.figure(figsize=(10, 6))
     plt.plot(bitcoin_data["timestamp"], bitcoin_data["price"], label="Bitcoin Price (USD)")
     plt.xlabel("Date")
     plt.ylabel("Price (USD)")
-    plt.title("Bitcoin Price Over Time")
+    plt.title("Bitcoin Price Over the Last Year")
     plt.legend()
     plt.grid()
     plt.show()
