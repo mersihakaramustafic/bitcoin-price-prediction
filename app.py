@@ -30,7 +30,6 @@ def fetch_bitcoin_data_one_year():
         return None
 
 def prepare_features(data):
-
     # Fatures (X) and target (y)    
     data["day"] = (data["timestamp"] - data["timestamp"].min()).dt.days
     X = data[["day"]]
