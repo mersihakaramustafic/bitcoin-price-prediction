@@ -6,17 +6,18 @@ from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_absolute_error
 import numpy as np
+import constants as c
 
 def fetch_bitcoin_data_one_year():
 
-    # Calculate the UNIX timestamps for the past year
+    # Calculate the UNIX timestamps for the past year from the current date
     end_ts = int(datetime.datetime.now().timestamp())
     start_ts = int((datetime.datetime.now() - datetime.timedelta(days=365)).timestamp())
 
     # CoinGecko API URL for Bitcoin market data
-    url = "https://api.coingecko.com/api/v3/coins/bitcoin/market_chart/range"
+    url = c.coingecko_url
     params = {
-        "vs_currency": "usd",  # Convert to USD
+        "vs_currency": c.currency,  # Convert to USD
         "from": start_ts,  # Start timestamp
         "to": end_ts,  # End timestamp
     }
