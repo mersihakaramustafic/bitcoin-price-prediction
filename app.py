@@ -33,23 +33,6 @@ def fetch_bitcoin_data_one_year():
     else:
         print("Error fetching data:", response.status_code, response.text)
         return None
-    
-def create_features(data):
-    
-    data["day"] = (data["timestamp"] - data["timestamp"].min()).dt.days
-    data["day_of_week"] = data["timestamp"].dt.dayofweek  # Monday = 0, Sunday = 6
-    data["day_of_month"] = data["timestamp"].dt.day
-
-    # Percentage change in price
-    data["price_pct_change"] = data["price"].pct_change().fillna(0)
-
-    # Rolling averages
-    data["price_7d_avg"] = data["price"].rolling(window=7).mean().fillna(data["price"].mean())
-    data["price_30d_avg"] = data["price"].rolling(window=30).mean().fillna(data["price"].mean())
-
-    # Rolling standard deviation (volatility)
-    data["volatility_7d"] = data["price"].rolling(window=7).std().fillna(0)
-    data["volatility_30d"] = data["price"].rolling(window=30).std().fillna(0)
 
 def prepare_features(data):
     # Fatures (X) and target (y)    
