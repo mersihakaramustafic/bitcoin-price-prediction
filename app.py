@@ -7,6 +7,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_absolute_error
 import numpy as np
 import constants as c
+from statsmodels.tsa.arima.model import ARIMA
 
 def fetch_bitcoin_data_one_year():
 
