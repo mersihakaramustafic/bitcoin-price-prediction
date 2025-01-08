@@ -42,7 +42,7 @@ def prepare_features(data):
     y = data["price"]
     return X, y
 
-def predict_prices(X, y, future_days=30):
+def predict_prices_by_linear_regression(X, y, future_days=30):
 
     # Split the data into train and test sets
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
@@ -63,6 +63,18 @@ def predict_prices(X, y, future_days=30):
 
     return future_days, future_prices
 
+def visualize_predictions(bitcoin_data, future_dates, future_prices):
+    
+    plt.figure(figsize=(12, 6))
+    plt.plot(bitcoin_data["timestamp"], bitcoin_data["price"], label="Historical Prices")
+    plt.plot(future_dates, future_prices, label="Predicted Prices", linestyle="--")
+    plt.xlabel("Date")
+    plt.ylabel("Price (USD)")
+    plt.title("Bitcoin Price Prediction for the Next 30 Days")
+    plt.legend()
+    plt.grid()
+    plt.show()
+
 def main():
 
     # Fetch data for the past year
@@ -70,27 +82,18 @@ def main():
 
     if bitcoin_data is not None:
         X, y = prepare_features(bitcoin_data)
-        future_days, future_prices = predict_prices(X, y, future_days=30)
+        future_dates, future_prices = predict_prices_by_linear_regression(X, y, future_days=30)
 
         # Generate future dates starting from today
         start_date = datetime.datetime.now()
         future_dates = [start_date + datetime.timedelta(days=i) for i in range(30)]
 
-        # Visualize predictions
-        plt.figure(figsize=(12, 6))
-        plt.plot(bitcoin_data["timestamp"], bitcoin_data["price"], label="Historical Prices")
-        plt.plot(future_dates, future_prices, label="Predicted Prices", linestyle="--")
-        plt.xlabel("Date")
-        plt.ylabel("Price (USD)")
-        plt.title("Bitcoin Price Prediction for the Next 30 Days")
-        plt.legend()
-        plt.grid()
-        plt.show()
+        visualize_predictions(bitcoin_data, future_dates, future_prices)
 
         # Display predicted values
         prediction_df = pd.DataFrame({
             "Date": future_dates,
-            "Predicted Price (USD)": future_prices
+            "Predicted Price (USD) by Linear Regression": future_prices
         })
         print(prediction_df)
 
