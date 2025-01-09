@@ -63,6 +63,12 @@ def predict_prices_by_linear_regression(X, y, future_days=30):
 
     return future_days, future_prices
 
+def train_arima_model(data, order):
+
+    model = ARIMA(data, order=order)
+    model_fit = model.fit()
+    return model_fit
+
 def visualize_predictions(bitcoin_data, future_dates, future_prices):
     
     plt.figure(figsize=(12, 6))
@@ -96,6 +102,14 @@ def main():
             "Predicted Price (USD) by Linear Regression": future_prices
         })
         print(prediction_df)
+
+        # Train ARIMA model
+        print("Training ARIMA model...")
+        order = (5, 1, 0)  # ARIMA(p, d, q) parameters can be adjusted
+        model_fit = train_arima_model(bitcoin_data["price"], order)
+
+        # Print model summary
+        print(model_fit.summary())
 
 if __name__ == "__main__":
     main()
